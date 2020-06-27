@@ -31,8 +31,8 @@ lint: deps
 deps:
 	go mod download
 	go get github.com/go-bindata/go-bindata/...@v${GOBINDATA_VERSION}
-	go get github.com/golangci/golangci-lint@v${GOLANGCI_VERSION}
-	go get github.com/mitchellh/gox@v${GOX_VERSION}
+	go get github.com/golangci/golangci-lint/...@v${GOLANGCI_VERSION}
+	go get github.com/mitchellh/gox/...@v${GOX_VERSION}
 
 .PHONY: assets
 assets: deps
