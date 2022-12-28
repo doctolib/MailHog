@@ -1,4 +1,7 @@
-Inspired by [MailCatcher](http://mailcatcher.me/), easier to install.
+MailHog [ ![Download](https://img.shields.io/github/release/mailhog/MailHog.svg) ](https://github.com/mailhog/MailHog/releases/tag/v1.0.0) [![GoDoc](https://godoc.org/github.com/mailhog/MailHog?status.svg)](https://godoc.org/github.com/mailhog/MailHog) [![Build Status](https://travis-ci.org/mailhog/MailHog.svg?branch=master)](https://travis-ci.org/mailhog/MailHog)
+=========
+
+Inspired by [MailCatcher](https://mailcatcher.me/), easier to install.
 
 * Download and run MailHog
 * Configure your outgoing SMTP server
@@ -17,9 +20,46 @@ MailHog is an email testing tool for developers:
 
 ### Installation
 
-```sh
-go get github.com/doctolib/MailHog
+#### Manual installation
+[Download the latest release for your platform](/docs/RELEASES.md). Then
+[read the deployment guide](/docs/DEPLOY.md) for deployment options.
+
+#### MacOS
+```bash
+brew update && brew install mailhog
 ```
+
+Then, start MailHog by running `mailhog` in the command line.
+
+#### Debian / Ubuntu Go < v1.18
+```bash
+sudo apt-get -y install golang-go
+go get github.com/mailhog/MailHog
+```
+
+#### Go >= v1.17 (Debian Bookworm) 
+```bash
+sudo apt-get -y install golang-go
+go install github.com/mailhog/MailHog@latest
+```
+
+Then, start MailHog by running `/path/to/MailHog` in the command line.
+
+E.g. the path to Go's bin files on Ubuntu is `~/go/bin/`, so to start the MailHog run:
+
+```bash
+~/go/bin/MailHog
+```
+
+#### FreeBSD
+```bash
+pkg install mailhog
+sysrc mailhog_enable="YES"
+service mailhog start
+```
+
+#### Docker
+[Run it from Docker Hub](https://registry.hub.docker.com/r/mailhog/mailhog/) or using the provided [Dockerfile](Dockerfile)
 
 ### Configuration
 
