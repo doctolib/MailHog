@@ -64,8 +64,6 @@ func main() {
 	go web.Listen(conf.HTTPBindAddr, assets.Asset, exitCh, cb)
 	go smtp.Listen(conf, exitCh)
 
-	for range exitCh {
-		log.Infof("Received exit signal")
-		os.Exit(0)
-	}
+	<-exitCh
+	log.Printf("Received exit signal")
 }
