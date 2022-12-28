@@ -31,26 +31,27 @@ func DefaultConfig() *Config {
 
 // Config is the config, kind of
 type Config struct {
-	Verbose          bool
-	SMTPBindAddr     string
-	HTTPBindAddr     string
-	Hostname         string
-	MongoURI         string
-	MongoDatabase    string
-	MongoColl        string
-	PostgresURI      string
-	StorageType      string
-	CORSOrigin       string
-	MaildirPath      string
-	InviteJim        bool
-	Storage          storage.Storage
-	MessageChan      chan *data.Message
-	Assets           func(asset string) ([]byte, error)
-	Monkey           monkey.ChaosMonkey
-	OutgoingSMTPFile string
-	OutgoingSMTP     map[string]*OutgoingSMTP
-	WebPath          string
-	AuthFile         string
+	Verbose            bool
+	SMTPBindAddr       string
+	HTTPBindAddr       string
+	Hostname           string
+	MongoURI           string
+	MongoDatabase      string
+	MongoColl          string
+	PostgresURI        string
+	StorageType        string
+	CORSOrigin         string
+	MaildirPath        string
+	InviteJim          bool
+	AllowJimActivation bool
+	Storage            storage.Storage
+	MessageChan        chan *data.Message
+	Assets             func(asset string) ([]byte, error)
+	Monkey             monkey.ChaosMonkey
+	OutgoingSMTPFile   string
+	OutgoingSMTP       map[string]*OutgoingSMTP
+	WebPath            string
+	AuthFile           string
 }
 
 // OutgoingSMTP is an outgoing SMTP server config
@@ -146,6 +147,7 @@ func RegisterFlags() {
 	flag.StringVar(&cfg.CORSOrigin, "cors-origin", envconf.FromEnvP("MH_CORS_ORIGIN", "").(string), "CORS Access-Control-Allow-Origin header for API endpoints")
 	flag.StringVar(&cfg.MaildirPath, "maildir-path", envconf.FromEnvP("MH_MAILDIR_PATH", "").(string), "Maildir path (if storage type is 'maildir')")
 	flag.BoolVar(&cfg.InviteJim, "invite-jim", envconf.FromEnvP("MH_INVITE_JIM", false).(bool), "Decide whether to invite Jim (beware, he causes trouble)")
+	flag.BoolVar(&cfg.AllowJimActivation, "allow-jim-activation", envconf.FromEnvP("MH_ALLOW_JIM_ACTIVATION", false).(bool), "Decide whether the user is allowed to activate Jim")
 	flag.StringVar(&cfg.OutgoingSMTPFile, "outgoing-smtp", envconf.FromEnvP("MH_OUTGOING_SMTP", "").(string), "JSON file containing outgoing SMTP servers")
 	Jim.RegisterFlags()
 	flag.StringVar(&cfg.WebPath, "ui-web-path", envconf.FromEnvP("MH_UI_WEB_PATH", "").(string), "WebPath under which the UI is served (without leading or trailing slashes), e.g. 'mailhog'. Value defaults to ''")

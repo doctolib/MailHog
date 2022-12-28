@@ -188,6 +188,11 @@ func (apiv2 *APIv2) createJim(w http.ResponseWriter, req *http.Request) {
 
 	apiv2.defaultOptions(w, req)
 
+	if !apiv2.config.AllowJimActivation {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
 	if apiv2.config.Monkey != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return

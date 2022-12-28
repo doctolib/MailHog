@@ -87,6 +87,8 @@ mailhogApp.controller('MailCtrl', function ($scope, $http, $sce, $timeout) {
     var url = $scope.host + 'api/v2/jim'
     $http.post(url).success(function(data) {
       $scope.getJim()
+    }).error(e => {
+      alert("Impossible to activate jim")
     })
   }
   $scope.disableJim = function() {
