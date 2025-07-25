@@ -1,3 +1,10 @@
+############################################################################################
+# NOTE:                                                                                    #
+# This is the original Dockerfile from MailHog repository.                                 #
+# This file is NOT USED by Doctolib to generate MailHog docker images.                     #
+# See https://github.com/doctolib/docker-images/blob/master/non_static/mailhog/Dockerfile  #
+############################################################################################
+
 #
 # MailHog Dockerfile
 #

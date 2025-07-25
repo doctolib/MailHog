@@ -59,7 +59,26 @@ service mailhog start
 ```
 
 #### Docker
-[Run it from Docker Hub](https://registry.hub.docker.com/r/mailhog/mailhog/) or using the provided [Dockerfile](Dockerfile)
+~~[Run it from Docker Hub](https://registry.hub.docker.com/r/mailhog/mailhog/) or using the provided [Dockerfile](Dockerfile)~~
+
+The MailHog Docker image at Doctolib is generated through a comprehensive CI/CD pipeline:
+
+  Build Process:
+  - Dockerfile is located in [docker-images](https://github.com/doctolib/docker-images/blob/master/non_static/mailhog/Dockerfile) repo.
+  - Multi-stage build using Go 1.24.3, compiles from Doctolib's MailHog fork
+  - Built automatically on changes via GitHub Actions
+  - Pushed to AWS ECR
+
+  Deployment:
+  - Images tagged with commit SHA and latest for master
+  - Deployed to Kubernetes clusters via configurations in [kube](https://github.com/doctolib/kube)
+  - Multi-region setup (eu-central-1, eu-west-3)
+  - Uses PostgreSQL backend with Vault-managed credentials
+
+  Infrastructure:
+  - ECR repositories managed via [Terraform](https://github.com/doctolib/terraform-infra)
+  - Automated testing with Docker Compose
+  - Security hardening with non-root user and network policies
 
 ### Configuration
 
