@@ -14,7 +14,7 @@ require (
 	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02
 	github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad
 	github.com/ian-kent/linkio v0.0.0-20141229112453-77fb4b01842c
-	github.com/jackc/pgx/v4 v4.7.0
+	github.com/jackc/pgx/v4 v4.18.3
 	github.com/jtolds/gls v4.20.0+incompatible
 	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/philhofer/fwd v0.0.0-20160129035939-98c11a7a6ec8
