@@ -9,7 +9,7 @@
 # MailHog Dockerfile
 #
 
-FROM golang:1.18-alpine as builder
+FROM golang:1.18-alpine@sha256:77f25981bd57e60a510165f3be89c901aec90453fd0f1c5a45691f6cb1528807 as builder
 
 # Install MailHog:
 RUN apk --no-cache add --virtual build-dependencies \
@@ -18,7 +18,7 @@ RUN apk --no-cache add --virtual build-dependencies \
   && export GOPATH=/root/gocode \
   && go install github.com/mailhog/MailHog@latest
 
-FROM alpine:3
+FROM alpine:3@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
 # Add mailhog user/group with uid/gid 1000.
 # This is a workaround for boot2docker issue #581, see
 # https://github.com/boot2docker/boot2docker/issues/581
@@ -42,7 +42,7 @@ RUN make -C MailHog deps
 RUN make -C MailHog
 RUN mv MailHog/MailHog MailHog/cmd/mhsendmail/mhsendmail ${BUILD_DIRECTORY}/bin
 
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim@sha256:67b30a61dc87758f0caf819646104f29ecbda97d920aaf5edc834128ac8493d3
 
 # Create mailhog user as non-login system user with user-group
 ARG USERNAME=mailhog
