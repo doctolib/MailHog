@@ -23,7 +23,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/pflag v1.0.5
 	github.com/t-k/fluent-logger-golang v1.0.0
-	github.com/tinylib/msgp v0.0.0-20160524150606-05e600edf28f
+	github.com/tinylib/msgp v1.6.4
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	gopkg.in/mgo.v2 v2.0.0-20160609180028-29cc868a5ca6
 )
