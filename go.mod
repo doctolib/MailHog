@@ -17,7 +17,7 @@ require (
 	github.com/jackc/pgx/v4 v4.7.0
 	github.com/jtolds/gls v4.20.0+incompatible
 	github.com/mitchellh/gox v1.0.1 // indirect
-	github.com/philhofer/fwd v0.0.0-20160129035939-98c11a7a6ec8
+	github.com/philhofer/fwd v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d
 	github.com/smartystreets/goconvey v1.6.4
