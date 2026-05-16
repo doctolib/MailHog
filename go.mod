@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.0.0
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/mux v1.3.1-0.20170228224354-599cba5e7b61
-	github.com/gorilla/pat v0.0.0-20160413041632-cf955c3d1f2c
+	github.com/gorilla/pat v1.0.2
 	github.com/gorilla/websocket v1.4.0
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02
