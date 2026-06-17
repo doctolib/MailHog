@@ -18,7 +18,7 @@ RUN apk --no-cache add --virtual build-dependencies \
   && export GOPATH=/root/gocode \
   && go install github.com/mailhog/MailHog@latest
 
-FROM alpine:3@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
+FROM alpine:3@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
 # Add mailhog user/group with uid/gid 1000.
 # This is a workaround for boot2docker issue #581, see
 # https://github.com/boot2docker/boot2docker/issues/581
