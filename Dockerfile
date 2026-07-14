@@ -42,7 +42,7 @@ RUN make -C MailHog deps
 RUN make -C MailHog
 RUN mv MailHog/MailHog MailHog/cmd/mhsendmail/mhsendmail ${BUILD_DIRECTORY}/bin
 
-FROM debian:bookworm-slim@sha256:67b30a61dc87758f0caf819646104f29ecbda97d920aaf5edc834128ac8493d3
+FROM debian:bookworm-slim@sha256:7b140f374b289a7c2befc338f42ebe6441b7ea838a042bbd5acbfca6ec875818
 
 # Create mailhog user as non-login system user with user-group
 ARG USERNAME=mailhog
