@@ -39,6 +39,12 @@ type Config struct {
 	MongoDatabase      string
 	MongoColl          string
 	PostgresURI        string
+	PostgresHost       string
+	PostgresPort       string
+	PostgresName       string
+	PostgresUser       string
+	PostgresUseIAM     bool
+	AWSRegion          string
 	StorageType        string
 	CORSOrigin         string
 	MaildirPath        string
@@ -94,7 +100,17 @@ func Configure() *Config {
 		}
 	case "postgres":
 		log.Info("Using PostgreSQL message storage")
-		s := storage.CreatePostgreSQL(cfg.PostgresURI)
+		var s *storage.PostgreSQL
+		if cfg.PostgresHost != "" {
+			// Standard database env vars (DATABASE_HOST, ...), with optional
+			// AWS RDS IAM authentication.
+			s = storage.CreatePostgreSQLFromParams(
+				cfg.PostgresHost, cfg.PostgresPort, cfg.PostgresName,
+				cfg.PostgresUser, cfg.AWSRegion, cfg.PostgresUseIAM,
+			)
+		} else {
+			s = storage.CreatePostgreSQL(cfg.PostgresURI)
+		}
 		if s == nil {
 			log.Fatal("PostgreSQL storage unavailable")
 		} else {
@@ -144,6 +160,14 @@ func RegisterFlags() {
 	flag.StringVar(&cfg.MongoDatabase, "mongo-db", envconf.FromEnvP("MH_MONGO_DB", "mailhog").(string), "MongoDB database, e.g. mailhog")
 	flag.StringVar(&cfg.MongoColl, "mongo-coll", envconf.FromEnvP("MH_MONGO_COLLECTION", "messages").(string), "MongoDB collection, e.g. messages")
 	flag.StringVar(&cfg.PostgresURI, "postgres-uri", envconf.FromEnvP("MH_POSTGRES_URI", "postgres://127.0.0.1:5432/mailhog").(string), "PostgrsQL URI, e.g. postgres://127.0.0.1:5432/mailhog")
+	// Standard database env vars. When DATABASE_HOST is set it takes precedence
+	// over MH_POSTGRES_URI.
+	flag.StringVar(&cfg.PostgresHost, "database-host", envconf.FromEnvP("DATABASE_HOST", "").(string), "PostgreSQL host; overrides MH_POSTGRES_URI when set")
+	flag.StringVar(&cfg.PostgresPort, "database-port", envconf.FromEnvP("DATABASE_PORT", "5432").(string), "PostgreSQL port")
+	flag.StringVar(&cfg.PostgresName, "database-name", envconf.FromEnvP("DATABASE_NAME", "mailhog").(string), "PostgreSQL database name")
+	flag.StringVar(&cfg.PostgresUser, "database-user", envconf.FromEnvP("DATABASE_USER", "").(string), "PostgreSQL user")
+	flag.BoolVar(&cfg.PostgresUseIAM, "database-use-iam", envconf.FromEnvP("DATABASE_USE_IAM", false).(bool), "Authenticate to PostgreSQL with AWS RDS IAM auth tokens")
+	flag.StringVar(&cfg.AWSRegion, "aws-region", envconf.FromEnvP("AWS_REGION", "").(string), "AWS region used for RDS IAM authentication")
 	flag.StringVar(&cfg.CORSOrigin, "cors-origin", envconf.FromEnvP("MH_CORS_ORIGIN", "").(string), "CORS Access-Control-Allow-Origin header for API endpoints")
 	flag.StringVar(&cfg.MaildirPath, "maildir-path", envconf.FromEnvP("MH_MAILDIR_PATH", "").(string), "Maildir path (if storage type is 'maildir')")
 	flag.BoolVar(&cfg.InviteJim, "invite-jim", envconf.FromEnvP("MH_INVITE_JIM", false).(bool), "Decide whether to invite Jim (beware, he causes trouble)")
