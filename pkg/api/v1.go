@@ -35,7 +35,7 @@ var stream *goose.EventStream
 type ReleaseConfig config.OutgoingSMTP
 
 func createAPIv1(conf *config.Config, r *pat.Router) *APIv1 {
-	log.Infof("Creating API v1 with WebPath: " + conf.WebPath)
+	log.Info("Creating API v1 with WebPath: " + conf.WebPath)
 	apiv1 := &APIv1{
 		config:      conf,
 		messageChan: make(chan *data.Message),

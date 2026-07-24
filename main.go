@@ -30,7 +30,7 @@ func configure() {
 
 func main() {
 	if len(os.Args) > 1 && (os.Args[1] == "-version" || os.Args[1] == "--version") {
-		log.Infof("MailHog version: " + version)
+		log.Info("MailHog version: " + version)
 		os.Exit(0)
 	}
 	if len(os.Args) > 1 && os.Args[1] == "bcrypt" {
