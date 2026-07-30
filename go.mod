@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/rds/auth v1.6.30
 	github.com/google/uuid v1.0.0
 	github.com/gorilla/pat v0.0.0-20160413041632-cf955c3d1f2c
-	github.com/gorilla/websocket v1.4.0
+	github.com/gorilla/websocket v1.5.3
 	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02
 	github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad
 	github.com/ian-kent/linkio v0.0.0-20141229112453-77fb4b01842c
