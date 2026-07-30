@@ -2,8 +2,13 @@ package storage
 
 import (
 	"context"
+	"fmt"
+	"net/url"
 	"os"
 
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/rds/auth"
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	log "github.com/sirupsen/logrus"
 
@@ -16,10 +21,62 @@ type PostgreSQL struct {
 	Pool *pgxpool.Pool
 }
 
-// CreatePostgreSQL creates a PostgreSQL backed storage backend
+// CreatePostgreSQL creates a PostgreSQL backed storage backend from a URI
 func CreatePostgreSQL(uri string) *PostgreSQL {
-	log.Infof("Connecting to PostgreSQL: %s\n", uri)
-	pool, err := pgxpool.Connect(context.TODO(), uri)
+	poolConfig, err := pgxpool.ParseConfig(uri)
+	if err != nil {
+		log.Errorf("Error parsing PostgreSQL URI: %s", err)
+		os.Exit(1)
+		return nil
+	}
+	return createPostgreSQL(poolConfig)
+}
+
+// CreatePostgreSQLFromParams builds the storage backend from the standard
+// database env vars, optionally authenticating with AWS RDS IAM auth tokens
+// instead of a static password.
+func CreatePostgreSQLFromParams(host, port, name, user, region string, useIAM bool) *PostgreSQL {
+	if port == "" {
+		port = "5432"
+	}
+	dsn := fmt.Sprintf("postgres://%s@%s:%s/%s?sslmode=require", url.QueryEscape(user), host, port, name)
+	poolConfig, err := pgxpool.ParseConfig(dsn)
+	if err != nil {
+		log.Errorf("Error building PostgreSQL config: %s", err)
+		os.Exit(1)
+		return nil
+	}
+
+	if useIAM {
+		opts := []func(*awsconfig.LoadOptions) error{}
+		if region != "" {
+			opts = append(opts, awsconfig.WithRegion(region))
+		}
+		awsCfg, err := awsconfig.LoadDefaultConfig(context.Background(), opts...)
+		if err != nil {
+			log.Errorf("Error loading AWS config for RDS IAM auth: %s", err)
+			os.Exit(1)
+			return nil
+		}
+		endpoint := fmt.Sprintf("%s:%s", host, port)
+		// RDS IAM auth tokens are short-lived (~15 min), so mint a fresh one for
+		// every new connection the pool opens.
+		poolConfig.BeforeConnect = func(ctx context.Context, connConfig *pgx.ConnConfig) error {
+			token, err := auth.BuildAuthToken(ctx, endpoint, region, user, awsCfg.Credentials)
+			if err != nil {
+				return fmt.Errorf("building RDS IAM auth token: %w", err)
+			}
+			connConfig.Password = token
+			return nil
+		}
+	}
+
+	return createPostgreSQL(poolConfig)
+}
+
+func createPostgreSQL(poolConfig *pgxpool.Config) *PostgreSQL {
+	log.Infof("Connecting to PostgreSQL: %s", poolConfig.ConnConfig.Host)
+	pool, err := pgxpool.ConnectConfig(context.TODO(), poolConfig)
 	if err != nil {
 		log.Errorf("Error connecting to PostgreSQL: %s", err)
 		// Do not fallback on in memory storage
