@@ -7,7 +7,7 @@ toolchain go1.24.3
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.30
 	github.com/aws/aws-sdk-go-v2/feature/rds/auth v1.6.30
-	github.com/google/uuid v1.0.0
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/pat v0.0.0-20160413041632-cf955c3d1f2c
 	github.com/gorilla/websocket v1.4.0
 	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02
