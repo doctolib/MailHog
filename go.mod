@@ -14,7 +14,7 @@ require (
 	github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad
 	github.com/ian-kent/linkio v0.0.0-20141229112453-77fb4b01842c
 	github.com/jackc/pgx/v4 v4.18.3
-	github.com/sirupsen/logrus v1.4.2
+	github.com/sirupsen/logrus v1.9.4
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/crypto v0.20.0
