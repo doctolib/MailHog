@@ -16,7 +16,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v1.6.4
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/pflag v1.0.10
 	golang.org/x/crypto v0.20.0
 	gopkg.in/mgo.v2 v2.0.0-20160609180028-29cc868a5ca6
 )
