@@ -17,7 +17,7 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/crypto v0.20.0
+	golang.org/x/crypto v0.54.0
 	gopkg.in/mgo.v2 v2.0.0-20160609180028-29cc868a5ca6
 )
 
