@@ -1,31 +1,25 @@
 run:
-  deadline: 120s
-  skip-dirs:
+  timeout: 120s
+issues:
+  exclude-dirs:
     - generated/
-          # minimal length of string constant, 3 by default
 linters:
   enable:
     - gofmt
     - goimports
     - govet
-    - golint
+    - revive
     - ineffassign
     - goconst
-    - deadcode
-    - gofmt
-    - goimports
     - gosimple
     - staticcheck
-    - structcheck
     - typecheck
     - unused
-    - varcheck
     - bodyclose
     - dogsled
     - goprintffuncname
     - misspell
     - prealloc
-    - scopelint
     - stylecheck
     - unconvert
     - gocritic
@@ -34,3 +28,11 @@ linters-settings:
   goconst:
     min-len: 4
     min-occurrences: 4
+  revive:
+    rules:
+      - name: unused-parameter
+        disabled: true
+      - name: superfluous-else
+        disabled: true
+      - name: dot-imports
+        disabled: true

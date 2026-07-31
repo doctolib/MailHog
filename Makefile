@@ -1,6 +1,6 @@
 VERSION := 2.0.0
 
-GOLANGCI_VERSION := 1.27.0
+GOLANGCI_VERSION := 1.64.8
 GOBINDATA_VERSION := 3
 GOX_VERSION := 1.0.1
 
@@ -34,9 +34,9 @@ lint: deps
 .PHONY: deps
 deps:
 	go mod download
-	go get github.com/go-bindata/go-bindata/...@v${GOBINDATA_VERSION}
-	go get github.com/golangci/golangci-lint/...@v${GOLANGCI_VERSION}
-	go get github.com/mitchellh/gox/...@v${GOX_VERSION}
+	go install github.com/go-bindata/go-bindata/...@v${GOBINDATA_VERSION}
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${GOLANGCI_VERSION}
+	go install github.com/mitchellh/gox@v${GOX_VERSION}
 
 .PHONY: assets
 assets: deps

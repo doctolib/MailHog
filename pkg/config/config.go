@@ -3,7 +3,7 @@ package config
 import (
 	"encoding/json"
 	"flag"
-	"io/ioutil"
+	"os"
 
 	log "github.com/sirupsen/logrus"
 
@@ -132,7 +132,7 @@ func Configure() *Config {
 
 	if len(cfg.OutgoingSMTPFile) > 0 {
 		var o map[string]*OutgoingSMTP
-		if b, err := ioutil.ReadFile(cfg.OutgoingSMTPFile); err != nil {
+		if b, err := os.ReadFile(cfg.OutgoingSMTPFile); err != nil {
 			log.Fatal(err)
 		} else if err = json.Unmarshal(b, &o); err != nil {
 			log.Fatal(err)
@@ -140,8 +140,8 @@ func Configure() *Config {
 		cfg.OutgoingSMTP = o
 	}
 
-	//sanitize webpath
-	//add a leading slash
+	// sanitize webpath
+	// add a leading slash
 	if cfg.WebPath != "" && !(cfg.WebPath[0] == '/') {
 		cfg.WebPath = "/" + cfg.WebPath
 	}

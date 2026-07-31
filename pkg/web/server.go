@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/pat"
@@ -21,7 +21,7 @@ var users map[string]string
 func AuthFile(file string) {
 	users = make(map[string]string)
 
-	b, err := ioutil.ReadFile(file)
+	b, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatalf("[HTTP] Error reading auth-file: %s", err)
 	}
@@ -38,14 +38,11 @@ func AuthFile(file string) {
 			}
 			users[p[0]] = p[1]
 		}
-		switch {
-		case err == io.EOF:
-			break
-		case err != nil:
-			panic(fmt.Errorf("[HTTP] Error reading auth-file: %s", err))
-		}
 		if err == io.EOF {
 			break
+		}
+		if err != nil {
+			panic(fmt.Errorf("[HTTP] Error reading auth-file: %s", err))
 		}
 	}
 
@@ -90,8 +87,8 @@ func Listen(httpBindAddr string, _ func(string) ([]byte, error), exitCh chan int
 	pat := pat.New()
 	registerCallback(pat)
 
-	//compress := handlers.CompressHandler(pat)
-	auth := BasicAuthHandler(pat) //compress)
+	// compress := handlers.CompressHandler(pat)
+	auth := BasicAuthHandler(pat) // compress)
 
 	err := http.ListenAndServe(httpBindAddr, auth)
 	if err != nil {

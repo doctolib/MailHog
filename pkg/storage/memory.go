@@ -119,7 +119,7 @@ func (memory *InMemory) Search(kind, query string, start, limit int) (*data.Mess
 	}
 
 	for i := start; i > end; i-- {
-		//for _, m := range memory.MessageIndex[start:end] {
+		// for _, m := range memory.MessageIndex[start:end] {
 		messages = append(messages, *filteredMessages[i])
 	}
 
@@ -151,7 +151,7 @@ func (memory *InMemory) List(start int, limit int) (*data.Messages, error) {
 	}
 
 	for i := start; i > end; i-- {
-		//for _, m := range memory.MessageIndex[start:end] {
+		// for _, m := range memory.MessageIndex[start:end] {
 		messages = append(messages, *memory.Messages[i])
 	}
 

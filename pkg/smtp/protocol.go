@@ -130,8 +130,8 @@ func (proto *Protocol) Start() *Reply {
 // Parse parses a line string and returns any remaining line string
 // and a reply, if a command was found. Parse does nothing until a
 // new line is found.
-// - TODO decide whether to move this to a buffer inside Protocol
-//   sort of like it this way, since it gives control back to the caller
+//   - TODO decide whether to move this to a buffer inside Protocol
+//     sort of like it this way, since it gives control back to the caller
 func (proto *Protocol) Parse(line string) (string, *Reply) {
 	var reply *Reply
 
@@ -164,7 +164,7 @@ func (proto *Protocol) ProcessData(line string) (reply *Reply) {
 	proto.Message.Data += line + "\r\n"
 
 	if strings.HasSuffix(proto.Message.Data, "\r\n.\r\n") {
-		proto.Message.Data = strings.Replace(proto.Message.Data, "\r\n..", "\r\n.", -1)
+		proto.Message.Data = strings.ReplaceAll(proto.Message.Data, "\r\n..", "\r\n.")
 
 		proto.log().Info("Got EOF, storing message and switching to MAIL state")
 		proto.Message.Data = strings.TrimSuffix(proto.Message.Data, "\r\n.\r\n")

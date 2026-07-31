@@ -4,7 +4,6 @@ import (
 	"flag"
 	"math/rand"
 	"net"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -37,7 +36,6 @@ func (j *Jim) RegisterFlags() {
 
 // Configure implements ChaosMonkey.Configure
 func (j *Jim) Configure() {
-	rand.Seed(time.Now().Unix())
 }
 
 // ConfigureFrom lets us configure a new Jim from an old one without
@@ -58,7 +56,6 @@ func (j *Jim) Accept(conn net.Conn) bool {
 
 // LinkSpeed implements ChaosMonkey.LinkSpeed
 func (j *Jim) LinkSpeed() *linkio.Throughput {
-	rand.Seed(time.Now().Unix())
 	if rand.Float64() < j.LinkSpeedAffect {
 		lsDiff := j.LinkSpeedMax - j.LinkSpeedMin
 		lsAffect := j.LinkSpeedMin + (lsDiff * rand.Float64())
