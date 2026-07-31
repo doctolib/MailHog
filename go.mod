@@ -13,7 +13,7 @@ require (
 	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02
 	github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad
 	github.com/ian-kent/linkio v0.0.0-20170807205755-97566b872887
-	github.com/jackc/pgx/v4 v4.18.3
+	github.com/jackc/pgx/v5 v5.10.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/smartystreets/goconvey v1.8.1
 	github.com/spf13/pflag v1.0.10
