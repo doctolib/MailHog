@@ -1,10 +1,10 @@
 VERSION := 2.0.0
 
-GOLANGCI_VERSION := 1.64.8
+GOLANGCI_VERSION := 2.12.2
 GOBINDATA_VERSION := 3
 GOX_VERSION := 1.0.1
 
-TEST_FLAGS :=
+TEST_FLAGS ?=
 
 GO111MODULE := on
 export GO111MODULE
@@ -34,8 +34,8 @@ lint: deps
 .PHONY: deps
 deps:
 	go mod download
-	go install github.com/go-bindata/go-bindata/...@v${GOBINDATA_VERSION}
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v${GOLANGCI_VERSION}
+	go install github.com/go-bindata/go-bindata/go-bindata@v${GOBINDATA_VERSION}
+	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v${GOLANGCI_VERSION}
 	go install github.com/mitchellh/gox@v${GOX_VERSION}
 
 .PHONY: assets

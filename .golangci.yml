@@ -1,38 +1,40 @@
+version: "2"
+
 run:
   timeout: 120s
-issues:
-  exclude-dirs:
-    - generated/
-linters:
+
+formatters:
   enable:
     - gofmt
     - goimports
+  exclusions:
+    paths:
+      - generated
+
+linters:
+  default: none
+  enable:
     - govet
     - revive
     - ineffassign
     - goconst
-    - gosimple
-    - staticcheck
-    - typecheck
-    - unused
+    - staticcheck   # includes gosimple and stylecheck
+    - unused        # covers deadcode, varcheck, structcheck
     - bodyclose
     - dogsled
     - goprintffuncname
     - misspell
-    - prealloc
-    - stylecheck
     - unconvert
     - gocritic
-  disable-all: true
-linters-settings:
-  goconst:
-    min-len: 4
-    min-occurrences: 4
-  revive:
-    rules:
-      - name: unused-parameter
-        disabled: true
-      - name: superfluous-else
-        disabled: true
-      - name: dot-imports
-        disabled: true
+  settings:
+    goconst:
+      min-len: 4
+      min-occurrences: 4
+    revive:
+      enable-all-rules: false
+      rules:
+        - name: unreachable-code
+        - name: superfluous-else
+  exclusions:
+    paths:
+      - generated

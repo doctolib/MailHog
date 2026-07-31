@@ -94,10 +94,9 @@ func Configure() *Config {
 		s := storage.CreateMongoDB(cfg.MongoURI, cfg.MongoDatabase, cfg.MongoColl)
 		if s == nil {
 			log.Fatal("MongoDB storage unavailable")
-		} else {
-			log.Infof("Connected to MongoDB")
-			cfg.Storage = s
 		}
+		log.Infof("Connected to MongoDB")
+		cfg.Storage = s
 	case "postgres":
 		log.Info("Using PostgreSQL message storage")
 		var s *storage.PostgreSQL
@@ -113,10 +112,9 @@ func Configure() *Config {
 		}
 		if s == nil {
 			log.Fatal("PostgreSQL storage unavailable")
-		} else {
-			log.Infof("Connected to PostgreSQL")
-			cfg.Storage = s
 		}
+		log.Infof("Connected to PostgreSQL")
+		cfg.Storage = s
 	case "maildir":
 		log.Infof("Using Maildir message storage")
 		s := storage.CreateMaildir(cfg.MaildirPath)
@@ -142,7 +140,7 @@ func Configure() *Config {
 
 	// sanitize webpath
 	// add a leading slash
-	if cfg.WebPath != "" && !(cfg.WebPath[0] == '/') {
+	if cfg.WebPath != "" && cfg.WebPath[0] != '/' {
 		cfg.WebPath = "/" + cfg.WebPath
 	}
 

@@ -115,7 +115,7 @@ func TestAcceptMessage(t *testing.T) {
 		}
 
 		sender := "test@test.test"
-		if _, err := clientBufWriter.Write([]byte(fmt.Sprintf("MAIL FROM:<%s>\r\n", sender))); true {
+		if _, err := fmt.Fprintf(clientBufWriter, "MAIL FROM:<%s>\r\n", sender); true {
 			So(err, ShouldBeNil)
 		}
 		So(clientBufWriter.Flush(), ShouldBeNil)
@@ -125,7 +125,7 @@ func TestAcceptMessage(t *testing.T) {
 		}
 
 		recipient := "test@test.test"
-		if _, err := clientBufWriter.Write([]byte(fmt.Sprintf("RCPT TO:<%s>\r\n", recipient))); true {
+		if _, err := fmt.Fprintf(clientBufWriter, "RCPT TO:<%s>\r\n", recipient); true {
 			So(err, ShouldBeNil)
 		}
 		So(clientBufWriter.Flush(), ShouldBeNil)

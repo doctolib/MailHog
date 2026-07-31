@@ -350,17 +350,20 @@ func shouldResembleAsMessage(actual interface{}, expected ...interface{}) string
 
 	if result := ShouldResemble(*actualMessage, *expectedMessage); result == "" {
 		return ""
-	} else if actualMessageJSON, err := json.MarshalIndent(actualMessage, "", "  "); err != nil {
-		panic(err)
-	} else if expectedMessageJSON, err := json.MarshalIndent(expectedMessage, "", "  "); err != nil {
-		panic(err)
-	} else {
-		return fmt.Sprintf(
-			"ACTUAL:\n%s\n\nEXPECTED:\n%s\n\nACTUAL was expected to resemble EXPECTED (but it didn't!)",
-			actualMessageJSON,
-			expectedMessageJSON,
-		)
 	}
+	actualMessageJSON, err := json.MarshalIndent(actualMessage, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	expectedMessageJSON, err := json.MarshalIndent(expectedMessage, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf(
+		"ACTUAL:\n%s\n\nEXPECTED:\n%s\n\nACTUAL was expected to resemble EXPECTED (but it didn't!)",
+		actualMessageJSON,
+		expectedMessageJSON,
+	)
 }
 
 // shouldContainAsMessage tests if actual contains a list of messagse at least one of which are expected
@@ -384,11 +387,13 @@ func shouldContainAsMessage(actual interface{}, expected ...interface{}) string 
 		}
 	}
 
-	if actualMessagesJSON, err := json.MarshalIndent(actualMessages, "", "  "); err != nil {
+	actualMessagesJSON, err := json.MarshalIndent(actualMessages, "", "  ")
+	if err != nil {
 		panic(err)
-	} else if expectedMessageJSON, err := json.MarshalIndent(expectedMessage, "", "  "); err != nil {
-		panic(err)
-	} else {
-		return fmt.Sprintf("ACTUAL:\n%s\n\nEXPECTED:\n%s\n\nACTUAL was expected to contain EXPECTED (but it didn't!)", actualMessagesJSON, expectedMessageJSON)
 	}
+	expectedMessageJSON, err := json.MarshalIndent(expectedMessage, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("ACTUAL:\n%s\n\nEXPECTED:\n%s\n\nACTUAL was expected to contain EXPECTED (but it didn't!)", actualMessagesJSON, expectedMessageJSON)
 }
