@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+env:
+  GOLANGCI_LINT_VERSION: v2.12.2
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GOCACHE: ${{ github.workspace }}/.cache/go-build
+      GOMODCACHE: ${{ github.workspace }}/.cache/go-mod
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: mailhog
+          POSTGRES_PASSWORD: mailhog
+          POSTGRES_DB: mailhog
+        options: >-
+          --health-cmd "pg_isready -U mailhog"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build
+        run: CGO_ENABLED=0 make build
+
+      - name: Lint
+        uses: reviewdog/action-golangci-lint@c76cceaaab89abe74e649d2e34c6c9adc26662d2 # v2.10.0
+        with:
+          cache: "false"
+          level: "error"
+          fail_level: "error"
+          go_version_file: "go.mod"
+          golangci_lint_version: "${{ env.GOLANGCI_LINT_VERSION }}"
+
+      - name: Test
+        env:
+          TEST_POSTGRESQL_URI: postgres://mailhog:mailhog@localhost:5432/mailhog
+        run: make test TEST_FLAGS=-v

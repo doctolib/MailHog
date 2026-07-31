@@ -1,2 +1,5 @@
 [tools]
 go = "1.24.3"
+
+[env]
+_.path = ["{{env.HOME}}/go/bin"]

@@ -68,13 +68,13 @@ func createTestMongoDBstorage(t *testing.T) (mongo *MongoDB) {
 	}
 
 	var db string
-	if u, err := url.Parse(uri); err != nil {
+	u, err := url.Parse(uri)
+	if err != nil {
 		panic(err)
-	} else {
-		db = u.Path
-		u.Path = ""
-		uri = u.String()
 	}
+	db = u.Path
+	u.Path = ""
+	uri = u.String()
 
 	coll := fmt.Sprintf("_%v", uuid.New())
 	return CreateMongoDB(uri, db, coll)

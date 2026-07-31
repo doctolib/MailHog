@@ -1,3 +1,4 @@
+// Package main implements mhsendmail, a sendmail-compatible wrapper for MailHog.
 package main
 
 import (

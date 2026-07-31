@@ -83,12 +83,12 @@ func createPostgreSQL(poolConfig *pgxpool.Config) *PostgreSQL {
 		os.Exit(1)
 		return nil
 	}
-	if schema, err := queries.Asset("queries/postgresql-schema.sql"); err != nil {
+	schema, err := queries.Asset("queries/postgresql-schema.sql")
+	if err != nil {
 		panic(err)
-	} else {
-		log.Infof("Creating or updating PostgreSQL schema.")
-		pool.Exec(context.Background(), string(schema))
 	}
+	log.Infof("Creating or updating PostgreSQL schema.")
+	pool.Exec(context.Background(), string(schema))
 
 	return &PostgreSQL{
 		Pool: pool,
