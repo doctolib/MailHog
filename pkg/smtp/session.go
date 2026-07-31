@@ -128,8 +128,8 @@ func (c *Session) Read() bool {
 	}
 
 	text := string(buf[0:n])
-	logText := strings.Replace(text, "\n", "\\n", -1)
-	logText = strings.Replace(logText, "\r", "\\r", -1)
+	logText := strings.ReplaceAll(text, "\n", "\\n")
+	logText = strings.ReplaceAll(logText, "\r", "\\r")
 	c.log().Tracef("Received %d bytes: '%s'\n", n, logText)
 
 	c.line += text
@@ -154,8 +154,8 @@ func (c *Session) Read() bool {
 func (c *Session) Write(reply *Reply) {
 	lines := reply.Lines()
 	for _, l := range lines {
-		logText := strings.Replace(l, "\n", "\\n", -1)
-		logText = strings.Replace(logText, "\r", "\\r", -1)
+		logText := strings.ReplaceAll(l, "\n", "\\n")
+		logText = strings.ReplaceAll(logText, "\r", "\\r")
 		c.log().Tracef("Sent %d bytes: '%s'", len(l), logText)
 		c.writer.Write([]byte(l))
 	}

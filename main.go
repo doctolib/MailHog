@@ -44,7 +44,6 @@ func main() {
 		b, err := bcrypt.GenerateFromPassword([]byte(pw), 4)
 		if err != nil {
 			log.Fatalf("error bcrypting password: %s", err)
-			os.Exit(1)
 		}
 		fmt.Println(string(b))
 		os.Exit(0)

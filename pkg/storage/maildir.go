@@ -2,7 +2,7 @@ package storage
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,7 +20,7 @@ type Maildir struct {
 // CreateMaildir creates a new maildir storage backend
 func CreateMaildir(path string) *Maildir {
 	if len(path) == 0 {
-		dir, err := ioutil.TempDir("", "mailhog")
+		dir, err := os.MkdirTemp("", "mailhog")
 		if err != nil {
 			panic(err)
 		}
@@ -40,11 +40,11 @@ func CreateMaildir(path string) *Maildir {
 
 // Store stores a message and returns its storage ID
 func (maildir *Maildir) Store(m *data.Message) (string, error) {
-	b, err := ioutil.ReadAll(m.Raw.Bytes())
+	b, err := io.ReadAll(m.Raw.Bytes())
 	if err != nil {
 		return "", err
 	}
-	err = ioutil.WriteFile(filepath.Join(maildir.Path, string(m.ID)), b, 0660)
+	err = os.WriteFile(filepath.Join(maildir.Path, string(m.ID)), b, 0660)
 	return string(m.ID), err
 }
 
@@ -145,7 +145,7 @@ func (maildir *Maildir) List(start, limit int) (*data.Messages, error) {
 	}
 
 	for _, fileinfo := range n {
-		b, err := ioutil.ReadFile(filepath.Join(maildir.Path, fileinfo.Name()))
+		b, err := os.ReadFile(filepath.Join(maildir.Path, fileinfo.Name()))
 		if err != nil {
 			return nil, err
 		}
@@ -178,7 +178,7 @@ func (maildir *Maildir) DeleteAll() error {
 
 // Load returns an individual message by storage ID
 func (maildir *Maildir) Load(id string) (*data.Message, error) {
-	b, err := ioutil.ReadFile(filepath.Join(maildir.Path, id))
+	b, err := os.ReadFile(filepath.Join(maildir.Path, id))
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil, nil

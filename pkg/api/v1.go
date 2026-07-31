@@ -109,7 +109,7 @@ func (apiv1 *APIv1) keepalive() {
 func (apiv1 *APIv1) eventstream(w http.ResponseWriter, req *http.Request) {
 	log.Infof("[APIv1] GET /api/v1/events")
 
-	//apiv1.defaultOptions(session)
+	// apiv1.defaultOptions(session)
 	if len(apiv1.config.CORSOrigin) > 0 {
 		w.Header().Add("Access-Control-Allow-Origin", apiv1.config.CORSOrigin)
 		w.Header().Add("Access-Control-Allow-Methods", "OPTIONS,GET,POST,DELETE")

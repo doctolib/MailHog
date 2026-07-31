@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/mail"
 	"net/smtp"
@@ -54,7 +54,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, smtpAddr, fromAddr)
 	}
 
-	body, err := ioutil.ReadAll(os.Stdin)
+	body, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error reading stdin")
 		os.Exit(11)
