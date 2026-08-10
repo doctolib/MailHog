@@ -32,6 +32,7 @@ func DefaultConfig() *Config {
 // Config is the config, kind of
 type Config struct {
 	Verbose            bool
+	CleanOnStart       bool
 	SMTPBindAddr       string
 	HTTPBindAddr       string
 	Hostname           string
@@ -150,6 +151,7 @@ func Configure() *Config {
 // RegisterFlags registers flags
 func RegisterFlags() {
 	flag.BoolVar(&cfg.Verbose, "verbose", envconf.FromEnvP("MH_VERBOSE", false).(bool), "Be verbose (TRACE log level)")
+	flag.BoolVar(&cfg.CleanOnStart, "clean-on-start", envconf.FromEnvP("MH_CLEAN_ON_START", false).(bool), "Delete all messages from storage and exit immediately, without starting the SMTP/HTTP listeners")
 	flag.StringVar(&cfg.SMTPBindAddr, "smtp-bind-addr", envconf.FromEnvP("MH_SMTP_BIND_ADDR", "0.0.0.0:1025").(string), "SMTP bind interface and port, e.g. 0.0.0.0:1025 or just :1025")
 	flag.StringVar(&cfg.HTTPBindAddr, "api-bind-addr", envconf.FromEnvP("MH_API_BIND_ADDR", "0.0.0.0:8025").(string), "HTTP bind interface and port for API, e.g. 0.0.0.0:8025 or just :8025")
 	flag.StringVar(&cfg.Hostname, "hostname", envconf.FromEnvP("MH_HOSTNAME", "mailhog.example").(string), "Hostname for EHLO/HELO response, e.g. mailhog.example")
