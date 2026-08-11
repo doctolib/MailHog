@@ -51,6 +51,13 @@ func main() {
 
 	configure()
 
+	if conf.CleanOnStart {
+		if err := runCleanOnStart(conf); err != nil {
+			log.Fatalf("cleanup failed: %s", err)
+		}
+		os.Exit(0)
+	}
+
 	if conf.AuthFile != "" {
 		web.AuthFile(conf.AuthFile)
 	}
@@ -65,4 +72,16 @@ func main() {
 
 	<-exitCh
 	log.Printf("Received exit signal")
+}
+
+// runCleanOnStart deletes all messages from the configured storage backend.
+// Used to run MailHog as a one-shot cleanup job (e.g. from a cronjob) instead
+// of starting the SMTP/HTTP listeners.
+func runCleanOnStart(conf *config.Config) error {
+	log.Info("MH_CLEAN_ON_START set: deleting all messages and exiting")
+	if err := conf.Storage.DeleteAll(); err != nil {
+		return err
+	}
+	log.Info("cleanup complete")
+	return nil
 }
