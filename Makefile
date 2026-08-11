@@ -25,18 +25,18 @@ test: deps assets
 
 .PHONY: release
 release: deps assets test lint
+	go install github.com/mitchellh/gox@v${GOX_VERSION}
 	gox -ldflags "-X main.version=${VERSION}" -output="build/{{.Dir}}_{{.OS}}_{{.Arch}}" .
 
 .PHONY: lint
 lint: deps
+	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v${GOLANGCI_VERSION}
 	golangci-lint run
 
 .PHONY: deps
 deps:
 	go mod download
 	go install github.com/go-bindata/go-bindata/go-bindata@v${GOBINDATA_VERSION}
-	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v${GOLANGCI_VERSION}
-	go install github.com/mitchellh/gox@v${GOX_VERSION}
 
 .PHONY: assets
 assets: deps
