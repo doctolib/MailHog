@@ -12,6 +12,12 @@ CREATE TABLE IF NOT EXISTS messages (
     message jsonb
 );
 
+-- messages has no primary key, so the default replica identity (which requires
+-- one) can't cover DELETEs. Namespaces with a FOR ALL TABLES CDC publication
+-- enabled (a platform-wide Terraform default) reject DELETE FROM messages
+-- without this, regardless of this app's own cdc.enabled setting.
+ALTER TABLE messages REPLICA IDENTITY FULL;
+
 CREATE INDEX IF NOT EXISTS messages_expr_idx ON messages USING btree (((message -> 'Created'::text)));
 CREATE INDEX IF NOT EXISTS messages_expr_idx2 ON messages USING btree (((message ->> 'ID'::text)));
 
