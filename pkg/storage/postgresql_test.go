@@ -38,6 +38,20 @@ func TestPostgreSQLDeleteAll(t *testing.T) {
 	})
 }
 
+func TestPostgreSQLDeleteAllBatched(t *testing.T) {
+	Convey("test postgresql message delete-all with multiple batches", t, func() {
+		s := createTestPostgreSQLstorage(t)
+		So(s, ShouldNotBeNil)
+		defer cleanupPostgreSQL(s)
+
+		original := deleteAllBatchSize
+		deleteAllBatchSize = 2
+		defer func() { deleteAllBatchSize = original }()
+
+		testDeleteAllBatched(s)
+	})
+}
+
 func TestPostgreSQLList(t *testing.T) {
 	Convey("test mongodb message list", t, func() {
 		s := createTestPostgreSQLstorage(t)
