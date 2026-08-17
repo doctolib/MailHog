@@ -237,6 +237,7 @@ func (pg *PostgreSQL) DeleteAll() error {
 			return err
 		}
 		if err := tx.Commit(context.TODO()); err != nil {
+			tx.Rollback(context.TODO())
 			conn.Release()
 			return err
 		}
