@@ -229,6 +229,13 @@ func (pg *PostgreSQL) DeleteAll() error {
 			conn.Release()
 			return err
 		}
+		// Disable statement timeout for this transaction only: each batch may be
+		// slow due to WAL writes (REPLICA IDENTITY FULL + CDC publication).
+		if _, err := tx.Exec(context.TODO(), "SET LOCAL statement_timeout = 0"); err != nil {
+			tx.Rollback(context.TODO())
+			conn.Release()
+			return err
+		}
 		tag, err := tx.Exec(context.TODO(), "DELETE FROM messages WHERE ctid IN (SELECT ctid FROM messages LIMIT $1)", deleteAllBatchSize)
 		if err != nil {
 			tx.Rollback(context.TODO())
