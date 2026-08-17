@@ -211,17 +211,40 @@ func (pg *PostgreSQL) DeleteOne(id string) error {
 	return nil
 }
 
-// DeleteAll deletes all messages stored in PostgreSQL
+// deleteAllBatchSize is the number of rows removed per iteration in DeleteAll.
+// Declared as a var so tests can override it to exercise multi-batch behaviour
+// without storing thousands of messages.
+var deleteAllBatchSize = 1000
+
+// DeleteAll deletes all messages stored in PostgreSQL in batches to avoid statement timeouts.
 func (pg *PostgreSQL) DeleteAll() error {
 	log.Debugf("Deleting all messages")
-	conn, err := pg.Pool.Acquire(context.TODO())
-	if err != nil {
-		return err
-	}
-	defer conn.Release()
-	if _, err := conn.Exec(context.TODO(), "DELETE FROM messages"); err != nil {
-		log.Errorf("Delete error %v", err)
-		return err
+	for {
+		conn, err := pg.Pool.Acquire(context.TODO())
+		if err != nil {
+			return err
+		}
+		tx, err := conn.BeginTx(context.TODO(), pgx.TxOptions{AccessMode: pgx.ReadWrite})
+		if err != nil {
+			conn.Release()
+			return err
+		}
+		tag, err := tx.Exec(context.TODO(), "DELETE FROM messages WHERE ctid IN (SELECT ctid FROM messages LIMIT $1)", deleteAllBatchSize)
+		if err != nil {
+			tx.Rollback(context.TODO())
+			conn.Release()
+			log.Errorf("Delete error %v", err)
+			return err
+		}
+		if err := tx.Commit(context.TODO()); err != nil {
+			tx.Rollback(context.TODO())
+			conn.Release()
+			return err
+		}
+		conn.Release()
+		if tag.RowsAffected() == 0 {
+			break
+		}
 	}
 	return nil
 }

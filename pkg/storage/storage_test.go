@@ -130,6 +130,35 @@ func testDeleteAll(s Storage) {
 	})
 }
 
+// testDeleteAllBatched verifies that DeleteAll removes every message even when
+// the total exceeds the batch size, i.e. that the loop runs multiple iterations.
+// Call this after setting deleteAllBatchSize to a value smaller than the number
+// of messages you store so that at least two batches are required.
+func testDeleteAllBatched(s Storage) {
+	Convey("test message delete-all with multiple batches", func() {
+		messages := []*data.Message{
+			newSimpleMessage("a@mailient.test", "b@mailient.test", "msg 1", "body 1"),
+			newSimpleMessage("a@mailient.test", "b@mailient.test", "msg 2", "body 2"),
+			newSimpleMessage("a@mailient.test", "b@mailient.test", "msg 3", "body 3"),
+			newSimpleMessage("a@mailient.test", "b@mailient.test", "msg 4", "body 4"),
+			newSimpleMessage("a@mailient.test", "b@mailient.test", "msg 5", "body 5"),
+		}
+
+		So(s.Count(), ShouldEqual, 0)
+
+		for _, message := range messages {
+			_, err := s.Store(cloneMessage(message))
+			So(err, ShouldBeNil)
+		}
+
+		So(s.Count(), ShouldEqual, len(messages))
+
+		err := s.DeleteAll()
+		So(err, ShouldBeNil)
+		So(s.Count(), ShouldEqual, 0)
+	})
+}
+
 // testList tests s.Count, s.Store, and s.List
 func testList(s Storage) {
 	message := newSimpleMessage(
