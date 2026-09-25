@@ -1,5 +1,3 @@
-[tools]
-go = "1.24.3"
-
-[env]
-_.path = ["{{env.HOME}}/go/bin"]
+[settings]
+# Read the Go version from go.mod's toolchain directive (single source of truth)
+idiomatic_version_file_enable_tools = ["go"]
