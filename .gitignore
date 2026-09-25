@@ -3,10 +3,6 @@
 /build/
 /cmd/mhsendmail/mhsendmail
 
-# Ignore generated files
-/generated/*
-!/generated/.gitkeep
-
 # Ignore IDE config
 /.idea
 /.vscode

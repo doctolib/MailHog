@@ -4,22 +4,15 @@ Building MailHog
 MailHog is built using `make`, and using [this Makefile](../Makefile).
 
 You can install MailHog using:
-`go get github.com/doctolib/MailHog`
+`go install github.com/doctolib/MailHog@latest`
 
-### Why do I need a Makefile?
+### Static assets
 
-MailHog has HTML, CSS and Javascript assets which need to be converted
-to a go source file using [go-bindata](https://github.com/jteeuwen/go-bindata).
+MailHog's HTML, CSS, Javascript and SQL assets are embedded into the binary
+at compile time using [`go:embed`](https://pkg.go.dev/embed) (see
+[assets/assets.go](../assets/assets.go) and [queries/queries.go](../queries/queries.go)).
 
-This must happen before running `go build` or `go install` to avoid compilation
-errors (e.g., `no buildable Go source files in MailHog-UI/assets`).
-
-### go generate
-
-The build should be updated to use `go generate` (added in Go 1.4) to
-preprocess static assets into go source files.
-
-However, this will break backwards compatibility with Go 1.2/1.3.
+No code generation step is required: a plain `go build` on a fresh checkout works.
 
 ### Building a release
 
