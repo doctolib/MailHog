@@ -1,8 +1,6 @@
 module github.com/doctolib/MailHog
 
-go 1.24.0
-
-toolchain go1.24.3
+go 1.24.3
 
 require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.32

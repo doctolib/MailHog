@@ -1,5 +1,6 @@
 [tools]
-go = "1.24.3"
+# Single source of truth for the Go version is go.mod
+go = "{{ exec(command='sed -n \"s/^go //p\" ' ~ config_root ~ '/go.mod') }}"
 
 [env]
 _.path = ["{{env.HOME}}/go/bin"]
