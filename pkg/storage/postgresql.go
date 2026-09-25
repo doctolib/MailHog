@@ -12,8 +12,8 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/doctolib/MailHog/generated/queries"
 	"github.com/doctolib/MailHog/pkg/data"
+	"github.com/doctolib/MailHog/queries"
 )
 
 // PostgreSQL represents PostgreSQL backed storage backend

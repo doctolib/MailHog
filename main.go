@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/doctolib/MailHog/generated/assets"
+	"github.com/doctolib/MailHog/assets"
 	"github.com/doctolib/MailHog/pkg/api"
 	"github.com/doctolib/MailHog/pkg/config"
 	"github.com/doctolib/MailHog/pkg/smtp"
