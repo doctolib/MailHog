@@ -7,9 +7,6 @@ formatters:
   enable:
     - gofmt
     - goimports
-  exclusions:
-    paths:
-      - generated
 
 linters:
   default: none
@@ -35,6 +32,3 @@ linters:
       rules:
         - name: unreachable-code
         - name: superfluous-else
-  exclusions:
-    paths:
-      - generated
