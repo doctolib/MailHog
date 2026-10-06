@@ -12,9 +12,6 @@
 /build/
 /cmd/mhsendmail/mhsendmail
 
-# Ignore generated files
-/generated
-
 # Ignore IDE config
 /.idea
 /.vscode
