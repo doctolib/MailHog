@@ -2,14 +2,15 @@ package storage
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
 	"os"
 
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/feature/rds/auth"
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/doctolib/MailHog/pkg/data"
@@ -76,7 +77,7 @@ func CreatePostgreSQLFromParams(host, port, name, user, region string, useIAM bo
 
 func createPostgreSQL(poolConfig *pgxpool.Config) *PostgreSQL {
 	log.Infof("Connecting to PostgreSQL: %s", poolConfig.ConnConfig.Host)
-	pool, err := pgxpool.ConnectConfig(context.TODO(), poolConfig)
+	pool, err := pgxpool.NewWithConfig(context.TODO(), poolConfig)
 	if err != nil {
 		log.Errorf("Error connecting to PostgreSQL: %s", err)
 		// Do not fallback on in memory storage
@@ -262,7 +263,7 @@ func (pg *PostgreSQL) Load(id string) (*data.Message, error) {
 	switch err := query.Scan(&message); {
 	case err == nil:
 		return &message, nil
-	case err.Error() == "no rows in result set":
+	case errors.Is(err, pgx.ErrNoRows):
 		return nil, nil
 	default:
 		log.Printf("Get error %v", err)
